@@ -11,7 +11,7 @@ app = webapp2.WSGIApplication([
 ], debug=True)
 
 def run():
-    st.title("Demo App")
+    st.title("Demo App Updated")
 
 
 if __name__ == "__main__":
