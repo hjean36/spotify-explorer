@@ -7,7 +7,6 @@ RUN pip install -U pip
 
 COPY requirements.txt app/requirements.txt
 RUN pip install -r app/requirements.txt
-RUN PYTHONPATH=$PYTHONPATH:`pwd`/ pytest -v
 
 # copy into a directory of its own (so it isn't in the toplevel dir)
 COPY . /app
