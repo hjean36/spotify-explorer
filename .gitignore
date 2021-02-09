@@ -1,3 +1,4 @@
 .idea
 /venv/
 *.iml
+.pytest_cache
