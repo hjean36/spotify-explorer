@@ -5,5 +5,5 @@ steps:
   entrypoint: /bin/sh
   args:
     - -c
-    - 'pip install -r requirements.txt && python -m pytest 
+    - 'pip install -r requirements.txt && python -m pytest' 
 timeout: "1600s"
