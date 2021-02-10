@@ -7,6 +7,7 @@ from spotipy.oauth2 import SpotifyOAuth, SpotifyPKCE
 os.environ['SPOTIPY_CLIENT_ID'] = config("SPOTIPY_CLIENT_ID")
 os.environ['SPOTIPY_CLIENT_SECRET'] = config("SPOTIPY_CLIENT_SECRET")
 os.environ['SPOTIPY_REDIRECT_URI'] = config("SPOTIPY_REDIRECT_URI")
+
 class SpotifyAPI:
 
     def generate_auth(self, scope):
@@ -48,4 +49,4 @@ class SpotifyAPI:
 
 
 if __name__ == '__main__':
-    SpotifyAPI
+    SpotifyAPI()
