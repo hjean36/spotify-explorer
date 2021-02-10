@@ -1,12 +1,14 @@
 from utils.spotify import SpotifyAPI
-
+from contextlib import redirect_stdout
+import background
+import asyncio
+import sys
+import tekore as tk
 
 class SpotifyUtil(SpotifyAPI):
 
-    def __init__(self, users, songs=[], options=[]):
-        self.users = users
-        self.songs = songs
-        self.options = options
+    def __init__(self):
+        super().__init__()
 
     def get_user_history(self, user):
         raise NotImplementedError()

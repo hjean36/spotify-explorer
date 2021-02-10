@@ -1,11 +1,20 @@
 import streamlit as st
 import pandas as pd
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+from decouple import config
+import os
+from spotipy import util
+from utils.spotify_util import SpotifyAPI
+import asyncio
 
 
-
-def run():
-    st.title("Demo App Updated")
 
 
 if __name__ == "__main__":
-    run()
+    sp = SpotifyAPI()
+    results = sp.get_top_songs()
+    st.write(results)
+
+
+
