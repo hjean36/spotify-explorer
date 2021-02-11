@@ -12,8 +12,10 @@ os.environ['SPOTIPY_REDIRECT_URI'] = config("SPOTIPY_REDIRECT_URI")
 
 class TestSpotifyAPI(unittest.TestCase):
 
-    def test_connect_auth(self):
-        pass
+    def test_get_key(self):
+        sp = SpotifyAPI()
+        client_id = sp.get_secret("SPOTIPY_CLIENT_ID")
+        self.assertIsNotNone(client_id)
 
     def test_get_history(self):
         self.skipTest("")
