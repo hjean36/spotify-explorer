@@ -1,6 +1,4 @@
 steps:
 - name: "gcr.io/cloud-builders/gcloud"
   args: ["app", "deploy"]
-  - env:
-    - 'SPOTIPY_CLIENT_ID'='2f1b6462e03541388143ccc85d056f67'
 timeout: "1600s"
