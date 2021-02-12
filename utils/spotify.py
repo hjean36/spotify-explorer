@@ -4,40 +4,56 @@ from decouple import config
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth, SpotifyPKCE
 from google.cloud import secretmanager
+from decouple import config
 
-os.environ['SPOTIPY_CLIENT_ID'] = 'SPOTIPY_CLIENT_ID'
-os.environ['SPOTIPY_CLIENT_SECRET'] = "SPOTIPY_CLIENT_SECRET"
-os.environ['SPOTIPY_REDIRECT_URI'] = "SPOTIPY_REDIRECT_URI"
+
+def process_songs(results):
+    songs = []
+    for idx, item in enumerate(results['items']):
+        track = item['track']
+        song = [f"{idx} {track['artists'][0]['name']} - {track['name']}"]
+        songs.extend(song)
+    return songs
+
 
 class SpotifyAPI:
+    def __init__(self):
+        self.secrets = [
+                    'SPOTIPY_CLIENT_ID',
+                    'SPOTIPY_CLIENT_SECRET',
+                    'SPOTIPY_REDIRECT_URI'
+                    ]
 
-    def get_secret(self, secret_id, project_id='spotify explore', version_id='latest'):
+    def get_secret(self, secret_id, project_id='spotify-explore', version_id='latest'):
         client = secretmanager.SecretManagerServiceClient()
         secret_detail = f"projects/{project_id}/secrets/{secret_id}/versions/{version_id}"
         response = client.access_secret_version(request={"name": secret_detail})
         data = response.payload.data.decode("UTF-8")
         return data
 
-    def set_all_env_variables(self, variables: list):
-        for v in variables:
-            os.environ[v] = self.get_secret(secret_id=v)
+    def set_all_env_variables(self):
+        for s in self.secrets:
+            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config("GOOGLE_APPLICATION_CREDENTIALS")
+            os.environ[s] = self.get_secret(secret_id=s)
 
-    def generate_auth(self, scope):
-        auth_manger = spotipy.SpotifyOAuth(
+    def generate_auth_sp(self, scope):
+        auth_manager = spotipy.SpotifyOAuth(
             scope=scope,
             open_browser=True
         )
-        return auth_manger
-
-    def get_top_songs(self):
-        auth_manager = self.generate_auth("user-library-read")
         sp = spotipy.Spotify(auth_manager=auth_manager)
-        results = sp.current_user_saved_tracks()
-        songs = []
-        for idx, item in enumerate(results['items']):
-            track = item['track']
-            song = [f"{idx} {track['artists'][0]['name']} {track['name']}"]
-            songs.extend(song)
+        return sp
+
+    def get_saved_songs(self):
+        sp = self.generate_auth_sp("user-library-read")
+        results = sp.current_user_saved_tracks(limit=40)
+        songs = process_songs(results)
+        return songs
+
+    def get_top_tracks(self):
+        sp = self.generate_auth_sp("user-library-read")
+        results = sp.current_user_top_tracks(time_range="medium_term", limit=10)
+        songs = process_songs(results)
         return songs
 
     def get_song(self):
