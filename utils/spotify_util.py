@@ -1,14 +1,10 @@
 from utils.spotify import SpotifyAPI
-from contextlib import redirect_stdout
-import background
-import asyncio
-import sys
-import tekore as tk
 
 
 class SpotifyUtil(SpotifyAPI):
 
-    def _process_tracks(self, item):
+    @staticmethod
+    def _process_tracks(item):
         track = item['track']
         track_name = track['album']['name']
         track_artist_name = track['artists'][0]['name']
@@ -32,11 +28,6 @@ class SpotifyUtil(SpotifyAPI):
         song_uris = [item['track']['uri'] for item in results['item']]
         return song_uris
 
-    def get_top_artists_uris(self, items, time_range, limit):
-        sp = self.generate_auth_sp('user_top_read')
-        results = sp.current_user_top_artists(limit=limit, time_range=time_range)
-        songs_uris = []
-
     def get_audio_features(self, song_uris):
         sp = self.generate_auth_sp('user-top-read')
         audio_features = sp.audio_features(song_uris)
@@ -47,7 +38,7 @@ class SpotifyUtil(SpotifyAPI):
         audio_analysis = [sp.audio_features(uri) for uri in song_uris]
         return audio_analysis
 
-    def recommend_songs(self, artists_uris):
+    def recommend_songs(self):
         sp = self.generate_auth_sp('user-library-read')
         results = self.current_user_top_artists(time_range=range, limit=10)
         artists_uris = [results['items'][x]['uri'] for x in range(results['limit'])]
