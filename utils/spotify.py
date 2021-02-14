@@ -5,6 +5,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth, SpotifyPKCE
 from google.cloud import secretmanager
 from decouple import config
+import requests
 
 
 def process_songs(results):
@@ -43,34 +44,6 @@ class SpotifyAPI:
         )
         sp = spotipy.Spotify(auth_manager=auth_manager)
         return sp
-
-    def get_saved_songs(self):
-        sp = self.generate_auth_sp("user-library-read")
-        results = sp.current_user_saved_tracks(limit=40)
-        songs = process_songs(results)
-        return songs
-
-    def get_top_tracks(self):
-        sp = self.generate_auth_sp("user-library-read")
-        results = sp.current_user_top_tracks(time_range="medium_term", limit=10)
-        songs = process_songs(results)
-        return songs
-
-    def get_song(self):
-        raise NotImplementedError()
-
-    def update_playlist(self):
-        raise NotImplementedError()
-
-    def get_song_seeds(self):
-        raise NotImplementedError()
-
-    def get_recommendation(self):
-        raise NotImplementedError()
-
-    def get_artist(self):
-        raise NotImplementedError()
-
 
 if __name__ == '__main__':
     SpotifyAPI()
