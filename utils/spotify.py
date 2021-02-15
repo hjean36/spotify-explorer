@@ -38,8 +38,9 @@ class SpotifyAPI:
             try:
                 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config("GOOGLE_APPLICATION_CREDENTIALS")
             except Exception as e:
-                print('Auth using Google Cloud Default')
+                pass
             os.environ[s] = self.get_secret(secret_id=s)
+        return True
 
 
 if __name__ == '__main__':

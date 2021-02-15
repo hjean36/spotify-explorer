@@ -4,14 +4,13 @@ import streamlit as st
 
 class SpotifyUtil(SpotifyAPI):
 
-    @staticmethod
-    def _process_tracks(item):
+    def _process_tracks(self, item):
         track = item['track']
         track_name = track['album']['name']
         track_artist_name = track['artists'][0]['name']
         return f"{track_name} - {track_artist_name}"
 
-
+    @st.cache
     def get_saved_tracks(self):
         sp = self.generate_auth_sp('user-library-read')
         results = sp.current_user_saved_tracks(limit=10)
