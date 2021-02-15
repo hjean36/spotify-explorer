@@ -4,12 +4,20 @@ from utils.spotify_util import SpotifyUtil
 
 
 if __name__ == "__main__" :
+    def _process_tracks(self, item):
+        track = item['track']
+        track_name = track['album']['name']
+        track_artist_name = track['artists'][0]['name']
+        return f"{track_name} - {track_artist_name}"
+
     sp = SpotifyUtil()
     env_variables_set = sp.set_all_env_variables()
     st.write('Saved Tracks')
     st.write(str(env_variables_set))
-    results = sp.get_saved_tracks()
-    st.write(results)
+    sp = sp.generate_auth_sp('user-library-read')
+    results = sp.current_user_saved_tracks(limit=10)
+    songs = [_process_tracks(item) for item in results['items']]
+    st.write(songs)
 
 
 
