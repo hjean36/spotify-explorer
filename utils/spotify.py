@@ -35,7 +35,10 @@ class SpotifyAPI:
 
     def set_all_env_variables(self):
         for s in self.secrets:
-            os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config("GOOGLE_APPLICATION_CREDENTIALS")
+            try:
+                os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = config("GOOGLE_APPLICATION_CREDENTIALS")
+            except Exception as e:
+                print('Auth using Google Cloud Default')
             os.environ[s] = self.get_secret(secret_id=s)
 
 
