@@ -11,10 +11,10 @@ class SpotifyUtil(SpotifyAPI):
         track_artist_name = track['artists'][0]['name']
         return f"{track_name} - {track_artist_name}"
 
-    @st.cache(suppress_st_warning=True)
+
     def get_saved_tracks(self):
         sp = self.generate_auth_sp('user-library-read')
-        results = sp.current_user_saved_tracks()
+        results = sp.current_user_saved_tracks(limit=10)
         songs = [self._process_tracks(item) for item in results['items']]
         return songs
 
